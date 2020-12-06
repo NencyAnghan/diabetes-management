@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+
+import 'circular_slider/appearance.dart';
+import 'circular_slider/circular_slider.dart';
+import 'common_widgets/form_field_setup.dart';
+import 'common_widgets/spacings.dart';
+import 'constants/colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,57 +29,61 @@ class CircularSlider extends StatefulWidget {
 }
 
 class _CircularSliderState extends State<CircularSlider> {
-  List<bool> isSelected;
+  List<bool> _isSelected;
+  TextEditingController _value = TextEditingController();
+  double _sliderValue = 10;
 
-  // int level = 50;
-  // Color colorDetector() {
-  //   if (level > 0 && level <= 30) {
-  //     return Colors.red;
-  //   } else if (level > 30 && level <= 120) {
-  //     return Colors.blue;
-  //   } else if (level > 120 && level <= 240) {
-  //     return Colors.yellow;
-  //   } else if (level > 240 && level <= 300) {
-  //     return Colors.orange[700];
-  //   } else {
-  //     return Colors.deepOrange[500];
-  //   }
-  // }
+  @override
+  void dispose() {
+    _value.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    isSelected = [true, false];
+    _isSelected = [true, false];
+    _value.text = _sliderValue.toStringAsFixed(0);
   }
 
-  Widget slider = SleekCircularSlider(
-    appearance: CircularSliderAppearance(
-      size: 150,
-      startAngle: 270,
-      angleRange: 360,
-      infoProperties: InfoProperties(
-        mainLabelStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 30,
-          color: Colors.white,
-        ),
-        //modifier: ,
-      ),
-      customWidths: CustomSliderWidths(
-        handlerSize: 10,
-        trackWidth: 10,
-      ),
-      customColors: CustomSliderColors(
-        progressBarColor: Colors.red,
-        trackColor: Colors.grey,
-      ),
-    ),
-    //initialValue: 20,
-    max: 360,
-    onChange: (double value) {
-      print(value);
-    },
-  );
+  String _formatIntervalTime(int init, double end) {
+    return end.toStringAsFixed(0);
+  }
+
+  void _updateLabelsD(int init, double value) {
+    setState(() {
+      _value.text = _formatIntervalTime(init, value);
+    });
+  }
+
+  Color _getColor() {
+    Color cc = Colors.red;
+
+    if (_isSelected[0]) {
+      if (double.parse(_formatIntervalTime(0, _sliderValue)) <= 80) {
+        return AppColors.cea5946;
+      } else if (double.parse(_formatIntervalTime(0, _sliderValue)) > 80 &&
+          double.parse(_formatIntervalTime(0, _sliderValue)) <= 100) {
+        return AppColors.cffdf44;
+      } else if (double.parse(_formatIntervalTime(0, _sliderValue)) > 100 &&
+          double.parse(_formatIntervalTime(0, _sliderValue)) <= 130) {
+        return Colors.green;
+      } else {
+        return AppColors.cea5946;
+      }
+    } else {
+      if (double.parse(_formatIntervalTime(0, _sliderValue)) <= 140) {
+        return AppColors.cffdf44;
+      } else if (double.parse(_formatIntervalTime(0, _sliderValue)) > 140 &&
+          double.parse(_formatIntervalTime(0, _sliderValue)) <= 180) {
+        return Colors.green;
+      } else {
+        return AppColors.cea5946;
+      }
+    }
+
+    return cc;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +135,70 @@ class _CircularSliderState extends State<CircularSlider> {
                   height: 100,
                 ),
                 CircleAvatar(
-                  radius: 90,
+                  radius: 110,
                   backgroundColor: Colors.black,
-                  child: slider,
+                  child: SleekCircularSlider(
+                    initialValue: double.parse(_value.text),
+                    child: Padding(
+                      padding: const EdgeInsets.all(42.0),
+                      child: Center(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SPH(10),
+                          FormFielsSetup(
+                            controller: _value,
+                            onFieldSubmitted: (val) {
+                              _updateLabelsD(0, double.parse(val));
+                            },
+                            // onChanged: (val) {
+                            //   _updateLabelsD(0, int.parse(val), 0);
+                            // },
+                          ),
+                          SPH(10),
+                          Text("mg/dL",
+                              style: TextStyle(
+                                // fontFamily: Keys.fontFamilyNoto,
+                                color: Color(0xffffffff),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.normal,
+                              )),
+                        ],
+                      )),
+                    ),
+
+                    appearance: CircularSliderAppearance(
+                      size: 200,
+                      startAngle: 270,
+                      angleRange: 360,
+                      infoProperties: InfoProperties(
+                        mainLabelStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                        //modifier: ,
+                      ),
+                      customWidths: CustomSliderWidths(
+                        handlerSize: 10,
+                        trackWidth: 10,
+                      ),
+                      customColors: CustomSliderColors(
+                        progressBarColor: _getColor(),
+                        trackColor: Colors.grey,
+                      ),
+                    ),
+                    //initialValue: 20,
+                    max: 300,
+
+                    onChange: (double value) {
+                      print(value);
+                      _sliderValue = value;
+                      _updateLabelsD(0, value);
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -154,14 +224,14 @@ class _CircularSliderState extends State<CircularSlider> {
                       ),
                     ),
                   ],
-                  isSelected: isSelected,
+                  isSelected: _isSelected,
                   onPressed: (index) {
                     setState(() {
-                      for (var i = 0; i < isSelected.length; i++) {
+                      for (var i = 0; i < _isSelected.length; i++) {
                         if (i == index) {
-                          isSelected[i] = true;
+                          _isSelected[i] = true;
                         } else {
-                          isSelected[i] = false;
+                          _isSelected[i] = false;
                         }
                       }
                     });
@@ -186,9 +256,7 @@ class _CircularSliderState extends State<CircularSlider> {
                     fontSize: 15,
                   ),
                 ),
-                SizedBox(
-                  height: 170,
-                ),
+                Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -244,7 +312,7 @@ class _CircularSliderState extends State<CircularSlider> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
-                               // fontWeight: FontWeight.bold,
+                                // fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],

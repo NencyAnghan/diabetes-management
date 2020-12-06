@@ -17,8 +17,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   intl: ^0.16.1
   fluttertoast: ^4.0.1
-  sleek_circular_slider: ^1.2.0+web
-  flutter_circular_slider: ^2.5.0
+#  sleek_circular_slider: ^1.2.0+web
+#  flutter_circular_slider: ^2.5.0
 
 dev_dependencies:
   flutter_test:
