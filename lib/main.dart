@@ -53,6 +53,7 @@ class _CircularSliderState extends State<CircularSlider> {
   void _updateLabelsD(int init, double value) {
     setState(() {
       _value.text = _formatIntervalTime(init, value);
+      _sliderValue = value;
     });
   }
 
@@ -85,6 +86,71 @@ class _CircularSliderState extends State<CircularSlider> {
     return cc;
   }
 
+  Widget _slider() {
+    return SleekCircularSlider(
+      initialValue: double.parse(_value.text),
+      child: Padding(
+        padding: const EdgeInsets.all(42.0),
+        child: Center(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SPH(10),
+            FormFielsSetup(
+              controller: _value,
+              onFieldSubmitted: (val) {
+                _updateLabelsD(0, double.parse(val));
+              },
+              // onChanged: (val) {
+              //   _updateLabelsD(0, int.parse(val), 0);
+              // },
+            ),
+            SPH(10),
+            Text("mg/dL",
+                style: TextStyle(
+                  // fontFamily: Keys.fontFamilyNoto,
+                  color: Color(0xffffffff),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                )),
+          ],
+        )),
+      ),
+
+      appearance: CircularSliderAppearance(
+        size: 200,
+        startAngle: 270,
+        angleRange: 360,
+        infoProperties: InfoProperties(
+          mainLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Colors.white,
+          ),
+          //modifier: ,
+        ),
+        customWidths: CustomSliderWidths(
+          handlerSize: 10,
+          trackWidth: 10,
+        ),
+        customColors: CustomSliderColors(
+          progressBarColor: _getColor(),
+          trackColor: Colors.grey,
+        ),
+      ),
+      //initialValue: 20,
+      max: 300,
+
+      onChange: (double value) {
+        print(value);
+        _sliderValue = value;
+        _updateLabelsD(0, value);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +176,7 @@ class _CircularSliderState extends State<CircularSlider> {
                   height: 10,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
                       icon: Icon(
@@ -118,9 +185,7 @@ class _CircularSliderState extends State<CircularSlider> {
                         size: 20,
                       ),
                     ),
-                    SizedBox(
-                      width: 70,
-                    ),
+                    Spacer(),
                     Text(
                       'ADD BLOOD GLUCOSE',
                       style: TextStyle(
@@ -128,6 +193,10 @@ class _CircularSliderState extends State<CircularSlider> {
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      width: 20,
                     ),
                   ],
                 ),
@@ -137,68 +206,7 @@ class _CircularSliderState extends State<CircularSlider> {
                 CircleAvatar(
                   radius: 110,
                   backgroundColor: Colors.black,
-                  child: SleekCircularSlider(
-                    initialValue: double.parse(_value.text),
-                    child: Padding(
-                      padding: const EdgeInsets.all(42.0),
-                      child: Center(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SPH(10),
-                          FormFielsSetup(
-                            controller: _value,
-                            onFieldSubmitted: (val) {
-                              _updateLabelsD(0, double.parse(val));
-                            },
-                            // onChanged: (val) {
-                            //   _updateLabelsD(0, int.parse(val), 0);
-                            // },
-                          ),
-                          SPH(10),
-                          Text("mg/dL",
-                              style: TextStyle(
-                                // fontFamily: Keys.fontFamilyNoto,
-                                color: Color(0xffffffff),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FontStyle.normal,
-                              )),
-                        ],
-                      )),
-                    ),
-
-                    appearance: CircularSliderAppearance(
-                      size: 200,
-                      startAngle: 270,
-                      angleRange: 360,
-                      infoProperties: InfoProperties(
-                        mainLabelStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.white,
-                        ),
-                        //modifier: ,
-                      ),
-                      customWidths: CustomSliderWidths(
-                        handlerSize: 10,
-                        trackWidth: 10,
-                      ),
-                      customColors: CustomSliderColors(
-                        progressBarColor: _getColor(),
-                        trackColor: Colors.grey,
-                      ),
-                    ),
-                    //initialValue: 20,
-                    max: 300,
-
-                    onChange: (double value) {
-                      print(value);
-                      _sliderValue = value;
-                      _updateLabelsD(0, value);
-                    },
-                  ),
+                  child: _slider(),
                 ),
                 SizedBox(
                   height: 20,
