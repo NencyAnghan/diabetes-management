@@ -56,7 +56,17 @@ class _CircularSliderState extends State<CircularSlider> {
       _sliderValue = value;
     });
   }
-
+ String updateText(double value){
+    if(value > 0 && value <=80){
+      return 'Your glucose level is too low. Avoid insuline. ';
+    }else if(value > 80 && value <=100){
+      return 'Your glucose level is normal. Good job and keep it up. ';
+    }else if(value > 100 && value <=130){
+      return 'Your glucose level is high. Take precautions for it.';
+    }else{
+      return 'Your glucose level is too high. Take insulin and avoid eating sugar food. ';
+    }
+ }
   Color _getColor() {
     Color cc = Colors.red;
 
@@ -82,7 +92,6 @@ class _CircularSliderState extends State<CircularSlider> {
         return AppColors.cea5946;
       }
     }
-
     return cc;
   }
 
@@ -170,167 +179,167 @@ class _CircularSliderState extends State<CircularSlider> {
           ),
           SafeArea(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 20,
                     ),
-                    Spacer(),
-                    Text(
-                      'ADD BLOOD GLUCOSE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Spacer(),
-                    SizedBox(
-                      width: 20,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 100,
-                ),
-                CircleAvatar(
-                  radius: 110,
-                  backgroundColor: Colors.black,
-                  child: _slider(),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ToggleButtons(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Text(
-                        'Pre-meal',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Text(
-                        'Post-meal',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                  isSelected: _isSelected,
-                  onPressed: (index) {
-                    setState(() {
-                      for (var i = 0; i < _isSelected.length; i++) {
-                        if (i == index) {
-                          _isSelected[i] = true;
-                        } else {
-                          _isSelected[i] = false;
-                        }
-                      }
-                    });
-                  },
-                  constraints: BoxConstraints(minHeight: 20, minWidth: 40),
-                  color: Colors.black,
-                  selectedColor: Colors.white,
-                  fillColor: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  borderWidth: 3,
-                  borderColor: Colors.black,
-                  selectedBorderColor: Colors.black,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Your glucose level is too low. Avoid insuline.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
                   ),
-                ),
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        print(' Value Cancelled');
-                      },
-                      child: Container(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.clear,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                //fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                  Spacer(),
+                  Text(
+                    'ADD BLOOD GLUCOSE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 100,
+              ),
+              CircleAvatar(
+                radius: 110,
+                backgroundColor: Colors.black,
+                child: _slider(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ToggleButtons(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    child: Text(
+                      'Pre-meal',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      width: 100,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('Value Entered');
-                      },
-                      child: Container(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Enter',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    child: Text(
+                      'Post-meal',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+                  ),
+                ],
+                isSelected: _isSelected,
+                onPressed: (index) {
+                  setState(() {
+                    for (var i = 0; i < _isSelected.length; i++) {
+                      if (i == index) {
+                        _isSelected[i] = true;
+                      } else {
+                        _isSelected[i] = false;
+                      }
+                    }
+                  });
+                },
+                constraints: BoxConstraints(minHeight: 20, minWidth: 40),
+                color: Colors.black,
+                selectedColor: Colors.white,
+                fillColor: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+                borderWidth: 3,
+                borderColor: Colors.black,
+                selectedBorderColor: Colors.black,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Your glucose level is too low. Avoid insuline.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
-              ],
-            ),
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      print(' Value Cancelled');
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.clear,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              //fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 100,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print('Value Entered');
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Enter',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+              ),
           ),
         ],
       ),
